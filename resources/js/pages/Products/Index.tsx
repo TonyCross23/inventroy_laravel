@@ -227,7 +227,7 @@ export default function Index({ products, filters }: Props) {
                                     value={data.name}
                                     onChange={e => setData('name', e.target.value)}
                                     className={`w-full h-11 rounded-lg border bg-transparent px-4 text-sm font-bold outline-none transition-all ${errors.name ? 'border-red-500 ring-1 ring-red-500' : 'border-input focus:ring-1 focus:ring-primary'}`}
-                                    placeholder="ဥပမာ - ကော်ဖီမစ်"
+                                    placeholder="ပစ္စည်းအမျိုးအမည်ကိုထည့်ပါ"
                                     autoFocus
                                 />
                                 {errors.name && <p className="text-[11px] text-red-500 font-bold">{errors.name}</p>}
@@ -246,7 +246,7 @@ export default function Index({ products, filters }: Props) {
                                     {errors.stock && <p className="text-[11px] text-red-500 font-bold">{errors.stock}</p>}
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-[11px] font-black uppercase text-muted-foreground tracking-widest">ဝယ်စျေး (MMK)</label>
+                                    <label className="text-[11px] font-black uppercase text-muted-foreground tracking-widest">ဝယ်စျေး (တခုချင်းစျေးနှုန်း)</label>
                                     <input
                                         type="number"
                                         step="0.01"
