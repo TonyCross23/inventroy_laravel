@@ -12,6 +12,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -22,12 +23,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind( ProductServiceInterface::class, ProductService::class);
+        $this->app->bind(ProductServiceInterface::class, ProductService::class);
 
         $this->app->bind(PurchaseServiceInterface::class, PurchaseService::class);
 
-        $this->app->bind( SaleServiceInterface::class, SaleService::class
-    );
+        $this->app->bind(
+            SaleServiceInterface::class,
+            SaleService::class
+        );
     }
 
     /**
@@ -37,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         Schema::defaultStringLength(191);
+
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 
     /**
@@ -50,14 +57,15 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
-            ? Password::min(12)
+        Password::defaults(
+            fn(): ?Password => app()->isProduction()
+                ? Password::min(12)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
                 ->uncompromised()
-            : null,
+                : null,
         );
     }
 }
