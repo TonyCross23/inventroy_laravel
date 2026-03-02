@@ -4,6 +4,7 @@ import type { BreadcrumbItem } from '@/types';
 import { FormEvent, useEffect, useState, useCallback } from 'react';
 import { PlusCircle, Trash2, ShoppingCart, FileDown, Search, X, Calendar, Package, Tag, Banknote, CheckCircle2, AlertCircle } from 'lucide-react';
 import debounce from 'lodash/debounce';
+import Pagination from '@/components/pagination';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'အဝယ်စာရင်း', href: '/purchases' },
@@ -28,6 +29,7 @@ interface Purchase {
 interface Props {
     purchases: {
         data: Purchase[];
+        links: any[];
     };
     products: Product[];
     filters: {
@@ -202,6 +204,7 @@ export default function Index({ purchases, products, filters }: Props) {
                             </tbody>
                         </table>
                     </div>
+                    <Pagination links={purchases.links} />
                 </div>
             </div>
 

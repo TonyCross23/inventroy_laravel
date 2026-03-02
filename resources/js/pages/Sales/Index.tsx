@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { FormEvent, useEffect, useState, useCallback } from 'react';
 import { PlusCircle, Trash2, Search, X, Calendar, Package, ArrowUpRight, FileDown, CheckCircle2, AlertCircle, ShoppingBag, Banknote } from 'lucide-react';
 import debounce from 'lodash/debounce';
+import Pagination from '@/components/pagination';
 
 export default function Index({ sales, products, filters }: any) {
     const { props } = usePage();
@@ -35,13 +36,13 @@ export default function Index({ sales, products, filters }: any) {
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
-        post('/sales', { 
+        post('/sales', {
             preserveScroll: true,
-            onSuccess: () => { 
-                setIsModalOpen(false); 
-                reset(); 
+            onSuccess: () => {
+                setIsModalOpen(false);
+                reset();
                 showToast("အရောင်းမှတ်တမ်း သိမ်းဆည်းပြီးပါပြီ", "success");
-            } 
+            }
         });
     };
 
@@ -139,6 +140,7 @@ export default function Index({ sales, products, filters }: any) {
                         </tbody>
                     </table>
                 </div>
+                <Pagination links={sales.links} />
             </div>
 
             {/* --- New Sale Modal --- */}
@@ -151,7 +153,7 @@ export default function Index({ sales, products, filters }: any) {
                             </h2>
                             <button onClick={() => setIsModalOpen(false)} className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-full transition-colors"><X className="w-5 h-5" /></button>
                         </div>
-                        
+
                         <form onSubmit={submit} className="p-6 space-y-4">
                             <div className="space-y-1.5">
                                 <label className="text-[11px] font-black uppercase text-muted-foreground tracking-widest flex items-center gap-1">
@@ -174,8 +176,8 @@ export default function Index({ sales, products, filters }: any) {
                                     <label className="text-[11px] font-black uppercase text-muted-foreground tracking-widest flex items-center gap-1">
                                         အရေအတွက်
                                     </label>
-                                    <input type="number" value={data.qty} onChange={e => setData('qty', e.target.value)} 
-                                        className={`w-full h-11 border rounded-lg bg-transparent px-3 text-sm font-bold outline-none ${errors.qty ? 'border-red-500' : 'border-input focus:ring-1 focus:ring-primary'}`} 
+                                    <input type="number" value={data.qty} onChange={e => setData('qty', e.target.value)}
+                                        className={`w-full h-11 border rounded-lg bg-transparent px-3 text-sm font-bold outline-none ${errors.qty ? 'border-red-500' : 'border-input focus:ring-1 focus:ring-primary'}`}
                                         placeholder="0" />
                                     {errors.qty && <p className="text-red-500 text-[11px] font-bold">{errors.qty}</p>}
                                 </div>
@@ -183,8 +185,8 @@ export default function Index({ sales, products, filters }: any) {
                                     <label className="text-[11px] font-black uppercase text-muted-foreground tracking-widest flex items-center gap-1">
                                         ရောင်းစျေး (တစ်ခု)
                                     </label>
-                                    <input type="number" value={data.unit_selling_price} onChange={e => setData('unit_selling_price', e.target.value)} 
-                                        className={`w-full h-11 border rounded-lg bg-transparent px-3 text-sm font-bold outline-none ${errors.unit_selling_price ? 'border-red-500' : 'border-input focus:ring-1 focus:ring-primary'}`} 
+                                    <input type="number" value={data.unit_selling_price} onChange={e => setData('unit_selling_price', e.target.value)}
+                                        className={`w-full h-11 border rounded-lg bg-transparent px-3 text-sm font-bold outline-none ${errors.unit_selling_price ? 'border-red-500' : 'border-input focus:ring-1 focus:ring-primary'}`}
                                         placeholder="0" />
                                     {errors.unit_selling_price && <p className="text-red-500 text-[11px] font-bold">{errors.unit_selling_price}</p>}
                                 </div>
@@ -201,11 +203,11 @@ export default function Index({ sales, products, filters }: any) {
                             )}
 
                             <div className="pt-2 flex gap-3">
-                                <button type="button" onClick={() => setIsModalOpen(false)} 
+                                <button type="button" onClick={() => setIsModalOpen(false)}
                                     className="flex-1 h-12 rounded-xl border border-input font-black text-[11px] uppercase tracking-widest hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
                                     မလုပ်တော့ပါ
                                 </button>
-                                <button disabled={processing} 
+                                <button disabled={processing}
                                     className="flex-[2] h-12 bg-primary text-white dark:text-gray-900 rounded-xl font-black text-[11px] uppercase tracking-widest shadow-lg hover:bg-primary/90 transition-all active:scale-[0.98] disabled:opacity-50">
                                     {processing ? 'သိမ်းဆည်းနေသည်...' : 'အရောင်းအတည်ပြုမည်'}
                                 </button>

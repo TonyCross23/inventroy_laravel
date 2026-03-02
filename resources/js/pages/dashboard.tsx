@@ -4,12 +4,11 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     AreaChart, Area, Cell
 } from 'recharts';
-import { ShoppingBag, TrendingUp, AlertTriangle, Package, Calendar } from 'lucide-react';
+import { ShoppingBag, TrendingUp, AlertTriangle, Package, Calendar, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 
 export default function Dashboard({ stats, salesChart, topProducts, filters }: any) {
     const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
-    // Error မတက်အောင် ကာကွယ်ခြင်း
     const dashboardStats = stats || { total_revenue: 0, total_profit: 0, low_stock: 0, total_products: 0 };
 
     const handleFilter = (range: string) => {
@@ -34,8 +33,8 @@ export default function Dashboard({ stats, salesChart, topProducts, filters }: a
                                 key={btn.value}
                                 onClick={() => handleFilter(btn.value)}
                                 className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${filters?.range === btn.value
-                                        ? 'bg-primary text-white shadow-md'
-                                        : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-foreground'
+                                    ? 'bg-primary text-white shadow-md'
+                                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-foreground'
                                     }`}
                             >
                                 {btn.label}
@@ -47,16 +46,16 @@ export default function Dashboard({ stats, salesChart, topProducts, filters }: a
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard title="Today Revenue" value={dashboardStats.total_revenue} icon={<ShoppingBag />} color="text-blue-600" bg="bg-blue-100" />
-                    <StatCard title="Today Profit" value={dashboardStats.total_profit} icon={<TrendingUp />} color="text-green-600" bg="bg-green-100" isProfit />
+                    <StatCard title="Today Profit" value={dashboardStats.total_profit} icon={<TrendingUp />} isProfitCard={true} />
                     <StatCard title="Low Stock Items" value={dashboardStats.low_stock} icon={<AlertTriangle />} color="text-orange-600" bg="bg-orange-100" noMmk />
                     <StatCard title="Total Products" value={dashboardStats.total_products} icon={<Package />} color="text-purple-600" bg="bg-purple-100" noMmk />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Area Chart */}
+                    {/* Area Chart - Sales History */}
                     <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border shadow-sm">
                         <h3 className="font-bold mb-6 text-neutral-500 uppercase text-[10px] tracking-widest flex items-center gap-2">
-                            <Calendar className="w-3 h-3" /> Sales History ({filters?.range})
+                            <Calendar className="w-3 h-3" /> Sales History ({filters?.range || '7days'})
                         </h3>
                         <div className="h-[300px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
@@ -77,7 +76,7 @@ export default function Dashboard({ stats, salesChart, topProducts, filters }: a
                         </div>
                     </div>
 
-                    {/* Bar Chart */}
+                    {/* Bar Chart - Top Products */}
                     <div className="bg-white dark:bg-neutral-900 p-6 rounded-2xl border shadow-sm">
                         <h3 className="font-bold mb-6 text-neutral-500 uppercase text-[10px] tracking-widest flex items-center gap-2">
                             <Package className="w-3 h-3" /> Top 5 Selling Products
@@ -104,14 +103,27 @@ export default function Dashboard({ stats, salesChart, topProducts, filters }: a
     );
 }
 
-function StatCard({ title, value, icon, color, bg, noMmk = false, isProfit = false }: any) {
+function StatCard({ title, value, icon, color, bg, noMmk = false, isProfitCard = false }: any) {
+    const isNegative = value < 0;
+
+    const iconBgClass = isProfitCard
+        ? (isNegative ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600')
+        : `${bg} ${color}`;
+
+    const textClass = isProfitCard
+        ? (isNegative ? 'text-red-600' : 'text-green-600')
+        : 'text-foreground';
+
     return (
         <div className="bg-white dark:bg-neutral-900 p-5 rounded-2xl border shadow-sm flex items-center gap-4 transition-transform hover:scale-[1.02]">
-            <div className={`p-3 ${bg} ${color} rounded-xl`}>{icon}</div>
+            <div className={`p-3 rounded-xl ${iconBgClass}`}>
+                {isProfitCard ? (isNegative ? <ArrowDownRight className="w-5 h-5" /> : <TrendingUp className="w-5 h-5" />) : icon}
+            </div>
             <div>
                 <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-tight">{title}</p>
-                <h4 className={`text-xl font-black ${isProfit ? 'text-green-600' : ''}`}>
-                    {(value || 0).toLocaleString()} {!noMmk && <span className="text-[10px] font-normal">MMK</span>}
+                <h4 className={`text-xl font-black font-mono ${textClass}`}>
+                    {(value || 0).toLocaleString()}
+                    {!noMmk && <span className="text-[10px] font-normal ml-1 text-muted-foreground">MMK</span>}
                 </h4>
             </div>
         </div>

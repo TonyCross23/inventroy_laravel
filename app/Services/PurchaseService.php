@@ -12,6 +12,7 @@ class PurchaseService implements PurchaseServiceInterface
     public function getAllPurchases(string $search = '')
     {
         return Purchase::with('product')
+            ->with('product:id,name')
             ->when($search, fn($q) => $q->whereHas('product', fn($pq) => $pq->where('name', 'like', "%{$search}%")))
             ->latest()->paginate(10)->withQueryString();
     }

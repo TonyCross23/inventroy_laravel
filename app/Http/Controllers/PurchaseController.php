@@ -18,7 +18,7 @@ class PurchaseController extends Controller
     {
         return Inertia::render('Purchases/Index', [
             'purchases' => $this->service->getAllPurchases($request->input('search', '')),
-            'products' => Product::all(['id', 'name']),
+            'products' => Product::select(['id', 'name'])->get(),
             'filters' => ['search' => $request->input('search', '')]
         ]);
     }

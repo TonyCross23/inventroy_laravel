@@ -18,6 +18,7 @@ class ProductController extends Controller
         $search = $request->input('search', '');
 
         $products = Product::query()
+            ->select('id', 'name', 'stock', 'buying_price', 'created_at')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
