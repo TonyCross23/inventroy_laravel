@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'; // Card ထပ်တိုးထားသည်
 import AuthLayout from '@/layouts/auth-layout';
-import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -109,14 +108,14 @@ export default function Login({
                                         </Button>
                                     </div>
 
-                                    {canRegister && (
+                                    {/* {canRegister && (
                                         <div className="text-center text-sm text-muted-foreground mt-2">
                                             Don't have an account?{' '}
                                             <TextLink href={register()} tabIndex={5}>
                                                 Sign up
                                             </TextLink>
                                         </div>
-                                    )}
+                                    )} */}
                                 </>
                             )}
                         </Form>
